@@ -81,8 +81,8 @@
     <h2>Date Of Birth</h2>
     <div class="row">
       <div class="column">
-        <h3>Choose Date</h3>
-        <select bind:value={selectedDay}>
+        <h3 label-for="select-day">Choose Date</h3>
+        <select id="select-day" bind:value={selectedDay}>
           {#each days as day}
             <option value={day}>{parseInt(day)}</option>
           {/each}
