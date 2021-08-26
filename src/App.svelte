@@ -34,6 +34,19 @@
     return lastDigit === idDigits[11];
   }
 
+  function getRandomDay(month: number, year: number): number {
+    if (month === 2) {
+      if (year % 4 === 0 && year % 100 !== 0) {
+        return Math.random() * 28 + 1;
+      }
+      return Math.random() * 27 + 1;
+    }
+    if ([4, 6, 9, 11].includes(month)) {
+      return Math.random() * 29 + 1;
+    }
+    return Math.random() * 30 + 1;
+  }
+
   function generate(): void {
     error = "";
     if (["04", "06", "09", "11"].includes(selectedMonth)) {
@@ -73,6 +86,17 @@
       generated = civilId;
     }
   }
+
+  function randomBod(): void {
+    const randomYear =
+      Math.floor(Math.random() * (new Date().getFullYear() - 1950) + 1950) + 1;
+    const randomMonth = Math.floor(Math.random() * 11) + 1;
+    const randomDay = Math.floor(getRandomDay(randomMonth, randomYear));
+    selectedDay = `${randomDay}`.padStart(2, "0");
+    selectedMonth = `${randomMonth}`.padStart(2, "0");
+    selectedYear = randomYear.toString();
+    generate();
+  }
 </script>
 
 <main>
@@ -110,6 +134,7 @@
       <p class="error">{error}</p>
     {/if}
     <button on:click={generate} class="button">Generate Civil ID</button>
+    <button on:click={randomBod} class="button">Genrate Random BOD</button>
     {#if generated !== undefined && generated !== null && generated.trim() !== ""}
       <div>
         <h3>Generated Civil ID is {generated}</h3>
