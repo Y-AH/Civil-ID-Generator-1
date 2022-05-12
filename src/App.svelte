@@ -4,6 +4,9 @@
   let selectedYear: string = new Date().getFullYear().toString();
 
   let error = "";
+  let copyError = "";
+
+  let copied = false;
 
   let generated: string;
 
@@ -47,6 +50,23 @@
     return Math.random() * 30 + 1;
   }
 
+  function copyToClipboard(value: string): void {
+    if (!navigator.clipboard) {
+      return;
+    }
+    navigator.clipboard
+      .writeText(value)
+      .then(() => {
+        copied = true;
+        copyError = "";
+      })
+      .catch((error) => {
+        copied = false;
+        copyError = "couldn't copy to clipboard";
+        console.error(error);
+      });
+  }
+
   function generate(): void {
     error = "";
     if (["04", "06", "09", "11"].includes(selectedMonth)) {
@@ -84,6 +104,7 @@
         civilId = start + random.toString();
       }
       generated = civilId;
+      copyToClipboard(civilId);
     }
   }
 
@@ -138,6 +159,11 @@
     {#if generated !== undefined && generated !== null && generated.trim() !== ""}
       <div>
         <h3>Generated Civil ID is {generated}</h3>
+      </div>
+    {/if}
+    {#if copied}
+      <div>
+        <h3>Copied {generated} to the clipboard.</h3>
       </div>
     {/if}
   </article>
